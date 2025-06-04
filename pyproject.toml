@@ -7,5 +7,8 @@ requires-python = ">=3.13"
 dependencies = [
     "langchain",
     "openai",
-    "tiktoken"
+    "tiktoken",
+    "langchain-community",
+    "langchain-openai",
+    "langchain-chroma"
 ]
