@@ -4,13 +4,14 @@ from langchain.document_loaders import TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
-from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 from langchain_chroma import Chroma
 from pydantic import BaseModel
 from langchain.schema import Document
-from langchain import OpenAI
 from langchain_openai import ChatOpenAI
+from langchain import hub
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
 
 from dotenv import load_dotenv
 
@@ -20,9 +21,10 @@ token = os.getenv("MY_TOKEN")
 endpoint = "https://models.github.ai/inference"
 model = "openai/gpt-4.1-nano"
 
-client = OpenAI(
+client = ChatOpenAI(
     base_url=endpoint,
     api_key=token,
+    model=model,
 )
 
 # Load the document
@@ -43,13 +45,27 @@ db = Chroma.from_documents(docs, embeddings)
 
 # Set up retriever and QA chain
 retriever = db.as_retriever()
-qa = RetrievalQA.from_chain_type(llm=client, retriever=retriever)
+
+prompt = hub.pull("rlm/rag-prompt")
+
+def format_docs(docs):
+    print(docs)
+    return "\n\n".join(doc.page_content for doc in docs)
+
 def main():
     print("Basic RAG demo about Pasvalys. Type your question (or 'exit' to quit):")
     while True:
         query = input("\nQuestion: ")
         if query.lower() in ("exit", "quit"): break
-        answer = qa.run(query)
+
+        rag_chain = (
+            {"context": retriever | format_docs, "question": RunnablePassthrough()}
+            | prompt
+            | client
+            | StrOutputParser()
+)
+
+        answer = rag_chain.invoke(query)
         print(f"Answer: {answer}")
 
 if __name__ == "__main__":
