@@ -12,5 +12,10 @@ dependencies = [
     "langchain-openai",
     "langchain-chroma",
     "haystack-ai>=2.14.2",
-    "sentence-transformers"
+    "sentence-transformers",
+]
+
+[tool.uv.workspace]
+members = [
+    "json-mode",
 ]
