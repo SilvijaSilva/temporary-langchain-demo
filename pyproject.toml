@@ -10,5 +10,7 @@ dependencies = [
     "tiktoken",
     "langchain-community",
     "langchain-openai",
-    "langchain-chroma"
+    "langchain-chroma",
+    "haystack-ai>=2.14.2",
+    "sentence-transformers"
 ]
