@@ -1,0 +1,13 @@
+# Cursor Rules for Pasvalys RAG Project
+
+## General Coding Guidelines
+
+### Error Handling
+- **Avoid try/catch blocks unless absolutely necessary**
+store operations that could fail due to external factors
+- Do NOT use try/catch for:
+  - Simple function calls that should work if inputs are valid
+  - Basic string/data manipulation
+  - Internal function calls within the same codebase
+- Prefer early returns and validation over catching exceptions
+- Use explicit error checking when possible (e.g., `if not file_exists()` instead of catching FileNotFoundError)
