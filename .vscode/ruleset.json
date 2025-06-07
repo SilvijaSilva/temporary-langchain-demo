@@ -1,0 +1,17 @@
+# .vscode/ruleset.json
+{
+  "rules": {
+    "no-useless-try-except": {
+      "level": "error",
+      "description": "Avoid using try/except blocks unless absolutely necessary. Only use try/except for error handling that cannot be avoided."
+    }
+  },
+  "overrides": [
+    {
+      "files": ["*.py"],
+      "rules": {
+        "no-useless-try-except": "error"
+      }
+    }
+  ]
+}
